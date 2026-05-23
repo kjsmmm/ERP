@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:flowable="http://flowable.org/bpmn"
+             targetNamespace="http://www.flowable.org/processdef">
+
+    <process id="purchase-request-approval" name="采购申请审批" isExecutable="true">
+
+        <startEvent id="start" name="提交采购申请" flowable:initiator="initiator"/>
+
+        <sequenceFlow id="flow1" sourceRef="start" targetRef="approveTask"/>
+
+        <userTask id="approveTask" name="主管审批"
+                  flowable:candidateGroups="purchase_manager">
+            <documentation>审批采购申请</documentation>
+        </userTask>
+
+        <sequenceFlow id="flow2" sourceRef="approveTask" targetRef="exclusiveGw"/>
+
+        <exclusiveGateway id="exclusiveGw" name="审批结果"/>
+
+        <sequenceFlow id="flow3" sourceRef="exclusiveGw" targetRef="end">
+            <conditionExpression>${approved == true}</conditionExpression>
+        </sequenceFlow>
+
+        <sequenceFlow id="flow4" sourceRef="exclusiveGw" targetRef="rejectEnd">
+            <conditionExpression>${approved == false}</conditionExpression>
+        </sequenceFlow>
+
+        <endEvent id="end" name="审批通过"/>
+
+        <endEvent id="rejectEnd" name="审批驳回"/>
+
+    </process>
+
+</definitions>

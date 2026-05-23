@@ -1,0 +1,24 @@
+# 开发环境配置
+spring:
+  # 数据库配置（开发环境）
+  datasource:
+    url: jdbc:mysql://localhost:3307/erp?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:dev_mysql_password_change_in_prod}
+
+  # Redis 配置（开发环境）
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:dev_redis_password_change_in_prod}
+
+# 日志配置（开发环境）
+logging:
+  level:
+    com.erp: DEBUG
+    org.springframework.security: DEBUG
+
+# JWT 配置（开发环境）
+jwt:
+  secret: ${JWT_SECRET:dev_jwt_secret_change_in_prod_min_32_bytes}

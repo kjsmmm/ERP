@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:flowable="http://flowable.org/bpmn"
+             targetNamespace="http://www.flowable.org/processdef">
+
+    <process id="order-change-approval" name="订单变更审批" isExecutable="true">
+
+        <startEvent id="start" name="提交变更申请" flowable:initiator="initiator"/>
+
+        <sequenceFlow id="flow1" sourceRef="start" targetRef="approveTask"/>
+
+        <userTask id="approveTask" name="主管审批"
+                  flowable:candidateGroups="supervisor">
+            <documentation>审批订单变更申请</documentation>
+        </userTask>
+
+        <sequenceFlow id="flow2" sourceRef="approveTask" targetRef="end"/>
+
+        <endEvent id="end" name="流程结束"/>
+
+    </process>
+
+</definitions>

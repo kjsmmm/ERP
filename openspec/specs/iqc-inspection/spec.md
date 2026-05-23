@@ -1,0 +1,44 @@
+# iqc-inspection Specification
+
+## Purpose
+TBD - created by archiving change iteration-5b. Update Purpose after archive.
+## Requirements
+### Requirement: 创建来料检验单
+系统 SHALL 支持基于采购单创建来料检验单，自动加载采购单的产品和数量。
+
+#### Scenario: 从采购单创建检验单
+- **WHEN** 用户选择采购单并创建来料检验单
+- **THEN** 系统自动加载采购单的产品明细，用户填写检验结果
+
+### Requirement: 填写检验结果
+系统 SHALL 支持对每个检验项目填写实际值和判定结果（合格/不合格）。
+
+#### Scenario: 逐项检验
+- **WHEN** 用户对检验项目填写实际测量值
+- **THEN** 系统根据标准值自动判定或由用户手动判定合格/不合格
+
+### Requirement: 检验单状态流转
+来料检验单 SHALL 支持以下状态：待检验 → 检验中 → 已完成。
+
+#### Scenario: 提交检验结果
+- **WHEN** 用户完成所有检验项目并提交
+- **THEN** 系统将检验单状态更新为"已完成"，并汇总判定结果
+
+### Requirement: 检验结果判定
+系统 SHALL 根据检验项目结果自动判定整批物料的检验结果（合格/不合格）。
+
+#### Scenario: 全部项目合格
+- **WHEN** 所有检验项目都合格
+- **THEN** 整批判定为合格
+
+#### Scenario: 存在不合格项
+- **WHEN** 任一检验项目不合格
+- **THEN** 整批判定为不合格
+
+### Requirement: 来料检验分页查询
+系统 SHALL 支持按检验单号、采购单号、检验结果分页查询。
+
+#### Scenario: 按检验结果筛选
+- **WHEN** 用户选择"不合格"筛选条件
+- **THEN** 系统返回所有检验不合格的来料检验单
+

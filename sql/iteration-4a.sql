@@ -1,0 +1,89 @@
+-- 迭代 4a: 生产基础数据管理
+-- 车间、班组、设备类型、设备、工艺路线、工序步骤
+
+-- 车间
+CREATE TABLE workshop (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  workshop_code VARCHAR(50) NOT NULL UNIQUE,
+  workshop_name VARCHAR(100) NOT NULL,
+  address VARCHAR(200),
+  manager VARCHAR(50),
+  phone VARCHAR(20),
+  description VARCHAR(500),
+  status TINYINT DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted TINYINT DEFAULT 0
+);
+
+-- 班组
+CREATE TABLE team (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  team_code VARCHAR(50) NOT NULL UNIQUE,
+  team_name VARCHAR(100) NOT NULL,
+  workshop_id BIGINT NOT NULL,
+  leader_id BIGINT,
+  member_count INT DEFAULT 0,
+  status TINYINT DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted TINYINT DEFAULT 0
+);
+
+-- 设备类型
+CREATE TABLE equipment_type (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  type_code VARCHAR(50) NOT NULL UNIQUE,
+  type_name VARCHAR(100) NOT NULL,
+  description VARCHAR(500),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted TINYINT DEFAULT 0
+);
+
+-- 设备
+CREATE TABLE equipment (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  equipment_code VARCHAR(50) NOT NULL UNIQUE,
+  equipment_name VARCHAR(100) NOT NULL,
+  equipment_type_id BIGINT NOT NULL,
+  workshop_id BIGINT NOT NULL,
+  status TINYINT DEFAULT 1,
+  purchase_date DATE,
+  last_maintenance_date DATE,
+  next_maintenance_date DATE,
+  remark VARCHAR(500),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted TINYINT DEFAULT 0
+);
+
+-- 工艺路线
+CREATE TABLE process_route (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  product_id BIGINT NOT NULL,
+  route_code VARCHAR(50) NOT NULL,
+  route_name VARCHAR(100) NOT NULL,
+  version INT DEFAULT 1,
+  is_default TINYINT DEFAULT 0,
+  status TINYINT DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted TINYINT DEFAULT 0,
+  INDEX idx_product_id (product_id)
+);
+
+-- 工序步骤
+CREATE TABLE process_step (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  route_id BIGINT NOT NULL,
+  step_no INT NOT NULL,
+  step_name VARCHAR(100) NOT NULL,
+  standard_time DECIMAL(10,2) COMMENT '标准工时(分钟)',
+  equipment_type VARCHAR(100) COMMENT '所需设备类型',
+  description VARCHAR(500),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted TINYINT DEFAULT 0,
+  INDEX idx_route_id (route_id)
+);

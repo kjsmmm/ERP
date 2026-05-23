@@ -1,0 +1,107 @@
+# ERP 系统配置
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api
+  tomcat:
+    uri-encoding: UTF-8
+  encoding:
+    charset: UTF-8
+    enabled: true
+    force: true
+
+spring:
+  application:
+    name: erp-backend
+  profiles:
+    active: dev
+
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:erp}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:dev_mysql_password_change_in_prod}
+
+  # Redis 配置
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:dev_redis_password_change_in_prod}
+      database: 0
+      timeout: 10000
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
+
+  # Jackson 配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    default-property-inclusion: non_null
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.erp.system.entity,com.erp.customer.entity,com.erp.product.entity,com.erp.order.entity,com.erp.inventory.entity,com.erp.production.entity,com.erp.purchase.entity,com.erp.quality.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# JWT 配置
+jwt:
+  secret: ${JWT_SECRET}
+  accessTokenExpire: ${JWT_ACCESS_TOKEN_EXPIRE:15}
+  refreshTokenExpire: ${JWT_REFRESH_TOKEN_EXPIRE:10080}
+
+# SpringDoc 配置
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  group-configs:
+    - group: default
+      display-name: ERP API
+      paths-to-match: /**
+      packages-to-scan: com.erp
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.erp: ${LOG_LEVEL:DEBUG}
+    org.springframework: INFO
+    org.springframework.security: DEBUG
+    com.baomidou.mybatisplus: DEBUG
+  file:
+    name: logs/erp-backend.log
+    max-size: 100MB
+    max-history: 30
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+
+# 文件上传配置
+upload:
+  base-path: ${UPLOAD_BASE_PATH:uploads}
+  url-prefix: /uploads
+
+# Flowable 工作流配置
+flowable:
+  database-schema-update: true
+  async-executor-activate: true
+  history-level: audit
+  check-process-definitions: false

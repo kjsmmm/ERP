@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.erp</groupId>
+        <artifactId>erp-backend</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>erp-boot</artifactId>
+    <packaging>jar</packaging>
+    <name>ERP Boot</name>
+    <description>启动模块 - 应用入口</description>
+
+    <dependencies>
+        <!-- 依赖公共模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-common</artifactId>
+        </dependency>
+
+        <!-- 依赖系统模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-system</artifactId>
+        </dependency>
+
+        <!-- 依赖认证模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-auth</artifactId>
+        </dependency>
+
+        <!-- 依赖客户模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-customer</artifactId>
+        </dependency>
+
+        <!-- 依赖产品模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-product</artifactId>
+        </dependency>
+
+        <!-- 依赖订单模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-order</artifactId>
+        </dependency>
+
+        <!-- 依赖库存模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-inventory</artifactId>
+        </dependency>
+
+        <!-- 依赖生产模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-production</artifactId>
+        </dependency>
+
+        <!-- 依赖采购模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-purchase</artifactId>
+        </dependency>
+
+        <!-- 依赖质量模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-quality</artifactId>
+        </dependency>
+
+        <!-- 依赖财务模块 -->
+        <dependency>
+            <groupId>com.erp</groupId>
+            <artifactId>erp-finance</artifactId>
+        </dependency>
+
+        <!-- Flowable 工作流引擎 -->
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

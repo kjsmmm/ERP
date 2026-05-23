@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工厂 ERP 系统 - 项目规划文档</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --primary-dark: #1e40af;
+            --success: #16a34a;
+            --success-light: #dcfce7;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.7;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: white;
+            border-right: 1px solid var(--gray-200);
+            overflow-y: auto;
+            z-index: 100;
+            padding: 24px 0;
+        }
+
+        .sidebar-title {
+            padding: 0 24px 20px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 16px;
+        }
+
+        .sidebar-title small {
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .nav-section {
+            padding: 0 12px;
+            margin-bottom: 8px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            padding: 8px 12px 4px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 6px 12px;
+            color: var(--gray-700);
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: all 0.15s;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: var(--sidebar-width);
+            padding: 40px 48px;
+            max-width: 1200px;
+        }
+
+        /* Header */
+        .doc-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 48px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+        }
+
+        .doc-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .doc-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .doc-meta {
+            display: flex;
+            gap: 24px;
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        .doc-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Sections */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .section h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section h2 .icon {
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 24px 0 12px;
+        }
+
+        .section h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin: 16px 0 8px;
+        }
+
+        .section p {
+            margin-bottom: 12px;
+            color: var(--gray-700);
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .info-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .info-card .label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            margin-bottom: 6px;
+        }
+
+        .info-card .value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        /* Tech Stack Table */
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+
+        .tech-table th {
+            background: var(--gray-100);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .tech-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .tech-table tr:hover td {
+            background: var(--gray-50);
+        }
+
+        .tech-table .layer-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .layer-frontend { background: #dbeafe; color: #1d4ed8; }
+        .layer-backend { background: #dcfce7; color: #15803d; }
+        .layer-data { background: #fef3c7; color: #b45309; }
+        .layer-infra { background: #f3e8ff; color: #7c3aed; }
+
+        /* Architecture Diagram */
+        .arch-diagram {
+            background: var(--gray-900);
+            color: #e5e7eb;
+            padding: 32px;
+            border-radius: 10px;
+            font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 20px 0;
+        }
+
+        /* Flow Diagram */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+            padding: 20px;
+            background: var(--gray-50);
+            border-radius: 10px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .flow-step {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .flow-arrow {
+            color: var(--gray-500);
+            font-size: 20px;
+        }
+
+        /* Tag / Badge */
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tag-p0 { background: var(--danger-light); color: var(--danger); }
+        .tag-p1 { background: var(--warning-light); color: var(--warning); }
+        .tag-p2 { background: var(--gray-100); color: var(--gray-500); }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0 8px 32px;
+            position: relative;
+            color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .checklist li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-300);
+            border-radius: 4px;
+        }
+
+        /* Security Card */
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .security-card {
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            padding: 24px;
+            border-top: 4px solid var(--primary);
+        }
+
+        .security-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--gray-900);
+        }
+
+        .security-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .security-card ul li {
+            padding: 4px 0;
+            font-size: 14px;
+            color: var(--gray-700);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .security-card ul li::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        /* Iteration Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+            margin: 24px 0;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 11px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gray-200);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 0 0 32px 24px;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -27px;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .timeline-item.iter-0::before { background: var(--gray-500); box-shadow: 0 0 0 2px var(--gray-500); }
+        .timeline-item.iter-1::before { background: var(--danger); box-shadow: 0 0 0 2px var(--danger); }
+        .timeline-item.iter-2::before { background: var(--warning); box-shadow: 0 0 0 2px var(--warning); }
+        .timeline-item.iter-3::before { background: var(--success); box-shadow: 0 0 0 2px var(--success); }
+        .timeline-item.iter-4::before { background: var(--primary); box-shadow: 0 0 0 2px var(--primary); }
+        .timeline-item.iter-5::before { background: #7c3aed; box-shadow: 0 0 0 2px #7c3aed; }
+        .timeline-item.iter-6::before { background: #ec4899; box-shadow: 0 0 0 2px #ec4899; }
+
+        .timeline-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .timeline-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .timeline-card .duration {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .timeline-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .timeline-card ul li {
+            padding: 4px 0;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .timeline-card .deliverable {
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--success-light);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* RBAC Diagram */
+        .rbac-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin: 24px 0;
+            padding: 32px;
+            background: var(--gray-50);
+            border-radius: 12px;
+        }
+
+        .rbac-entity {
+            text-align: center;
+            padding: 16px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .rbac-user { background: var(--primary-light); color: var(--primary); border: 2px solid var(--primary); }
+        .rbac-role { background: var(--warning-light); color: var(--warning); border: 2px solid var(--warning); }
+        .rbac-perm { background: var(--success-light); color: var(--success); border: 2px solid var(--success); }
+
+        .rbac-arrow {
+            font-size: 24px;
+            color: var(--gray-500);
+        }
+
+        .rbac-detail {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .rbac-detail-card {
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .rbac-detail-card h5 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .rbac-detail-card ul {
+            list-style: none;
+            padding: 0;
+            font-size: 13px;
+            color: var(--gray-700);
+        }
+
+        .rbac-detail-card ul li {
+            padding: 3px 0;
+        }
+
+        /* Status Machine */
+        .state-machine {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 24px;
+            background: var(--gray-50);
+            border-radius: 10px;
+        }
+
+        .state-box {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 2px solid;
+        }
+
+        .state-draft { border-color: var(--gray-300); background: white; color: var(--gray-700); }
+        .state-confirmed { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+        .state-producing { border-color: var(--warning); background: var(--warning-light); color: var(--warning); }
+        .state-done { border-color: var(--success); background: var(--success-light); color: var(--success); }
+        .state-closed { border-color: var(--gray-500); background: var(--gray-100); color: var(--gray-500); }
+        .state-cancelled { border-color: var(--danger); background: var(--danger-light); color: var(--danger); }
+
+        .state-arrow {
+            font-size: 18px;
+            color: var(--gray-500);
+        }
+
+        /* Risk Table */
+        .risk-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+
+        .risk-table th {
+            background: var(--gray-100);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .risk-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        /* Module Cards */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .module-card {
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            padding: 24px;
+            transition: box-shadow 0.2s;
+        }
+
+        .module-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .module-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .module-card p {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+        }
+
+        .module-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .module-card ul li {
+            padding: 3px 0;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        /* BOM Tree */
+        .bom-tree {
+            font-family: "Cascadia Code", "Consolas", monospace;
+            font-size: 14px;
+            background: var(--gray-50);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 16px 0;
+            line-height: 1.8;
+            color: var(--gray-700);
+        }
+
+        /* Process Route */
+        .process-route {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 16px 0;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+        }
+
+        .process-step .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .process-step .step-name {
+            font-weight: 600;
+            min-width: 80px;
+        }
+
+        .process-step .step-detail {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .process-connector {
+            width: 2px;
+            height: 20px;
+            background: var(--gray-300);
+            margin-left: 31px;
+        }
+
+        /* Footer */
+        .doc-footer {
+            text-align: center;
+            padding: 32px;
+            color: var(--gray-500);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; padding: 20px; }
+            .doc-header { padding: 24px; }
+            .doc-header h1 { font-size: 24px; }
+            .section { padding: 20px; }
+        }
+
+        /* Print */
+        @media print {
+            .sidebar { display: none; }
+            .main { margin-left: 0; }
+            .section { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar">
+    <div class="sidebar-title">
+        工厂 ERP 系统
+        <small>项目规划文档 v1.0</small>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-section-title">概述</div>
+        <a class="nav-link active" href="#overview">项目概述</a>
+        <a class="nav-link" href="#principles">核心原则</a>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-section-title">技术架构</div>
+        <a class="nav-link" href="#tech-stack">技术栈总览</a>
+        <a class="nav-link" href="#architecture">架构设计</a>
+        <a class="nav-link" href="#backend-arch">后端分层</a>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-section-title">安全架构</div>
+        <a class="nav-link" href="#authn">认证方案</a>
+        <a class="nav-link" href="#authz">授权方案</a>
+        <a class="nav-link" href="#audit">审计追踪</a>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-section-title">功能模块</div>
+        <a class="nav-link" href="#modules">模块总览</a>
+        <a class="nav-link" href="#mod-auth">用户认证</a>
+        <a class="nav-link" href="#mod-customer">客户管理</a>
+        <a class="nav-link" href="#mod-product">产品管理</a>
+        <a class="nav-link" href="#mod-order">订单管理</a>
+        <a class="nav-link" href="#mod-inventory">库存管理</a>
+        <a class="nav-link" href="#mod-production">生产管理</a>
+        <a class="nav-link" href="#mod-purchase">采购管理</a>
+        <a class="nav-link" href="#mod-quality">质量管理</a>
+        <a class="nav-link" href="#mod-report">报表分析</a>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-section-title">其他</div>
+        <a class="nav-link" href="#workflow">工作流设计</a>
+        <a class="nav-link" href="#database">数据库设计</a>
+        <a class="nav-link" href="#iteration">迭代计划</a>
+        <a class="nav-link" href="#deploy">部署方案</a>
+        <a class="nav-link" href="#risks">风险与应对</a>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+
+    <!-- Header -->
+    <div class="doc-header" id="overview">
+        <h1>工厂 ERP 系统</h1>
+        <p>企业级工厂资源规划系统 - 项目规划文档</p>
+        <div class="doc-meta">
+            <span>版本: v1.0</span>
+            <span>日期: 2026-05-09</span>
+            <span>状态: 规划阶段</span>
+        </div>
+    </div>
+
+    <!-- 核心原则 -->
+    <div class="section" id="principles">
+        <h2><span class="icon">1</span> 项目概述</h2>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="label">工厂模式</div>
+                <div class="value">混合模式（OEM/ODM + 自有产品）</div>
+            </div>
+            <div class="info-card">
+                <div class="label">工厂数量</div>
+                <div class="value">单工厂（预留多工厂扩展）</div>
+            </div>
+            <div class="info-card">
+                <div class="label">仓库数量</div>
+                <div class="value">多仓库管理</div>
+            </div>
+            <div class="info-card">
+                <div class="label">系统规模</div>
+                <div class="value">中型（20-100 用户）</div>
+            </div>
+            <div class="info-card">
+                <div class="label">外部集成</div>
+                <div class="value">暂无（可扩展）</div>
+            </div>
+            <div class="info-card">
+                <div class="label">移动端</div>
+                <div class="value">暂不考虑</div>
+            </div>
+        </div>
+
+        <h3>核心原则</h3>
+        <div class="security-grid">
+            <div class="security-card">
+                <h4>安全优先</h4>
+                <ul>
+                    <li>认证授权、数据加密、审计追踪</li>
+                    <li>企业级安全标准，不因开发便利妥协</li>
+                </ul>
+            </div>
+            <div class="security-card">
+                <h4>稳固落地</h4>
+                <ul>
+                    <li>不追求技术时髦</li>
+                    <li>选择成熟稳定的技术栈</li>
+                </ul>
+            </div>
+            <div class="security-card">
+                <h4>渐进交付</h4>
+                <ul>
+                    <li>纵向切片迭代</li>
+                    <li>每次迭代交付可用功能</li>
+                </ul>
+            </div>
+            <div class="security-card">
+                <h4>预留扩展</h4>
+                <ul>
+                    <li>数据模型为多工厂留好接口</li>
+                    <li>架构支持未来多地点扩展</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 技术栈总览 -->
+    <div class="section" id="tech-stack">
+        <h2><span class="icon">2</span> 技术架构</h2>
+
+        <h3>技术栈总览</h3>
+        <table class="tech-table">
+            <thead>
+                <tr>
+                    <th>层级</th>
+                    <th>技术选型</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="layer-badge layer-frontend">前端</span></td>
+                    <td>Vue 3.3+ (Composition API)</td>
+                    <td>响应式框架，模板语法直觉友好</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-frontend">前端</span></td>
+                    <td>Element Plus</td>
+                    <td>企业级组件丰富，表格/表单成熟</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-frontend">前端</span></td>
+                    <td>Vben Admin</td>
+                    <td>开箱即用的企业管理后台方案</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-frontend">前端</span></td>
+                    <td>Vite 5 + TypeScript</td>
+                    <td>极速构建 + 强类型</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-backend">后端</span></td>
+                    <td>Spring Boot 3.2+ / JDK 17</td>
+                    <td>Java 生态企业级首选</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-backend">后端</span></td>
+                    <td>Spring Security 6 + JWT</td>
+                    <td>认证授权标准方案</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-backend">后端</span></td>
+                    <td>MyBatis-Plus</td>
+                    <td>简化数据库操作，内置分页/代码生成</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-backend">后端</span></td>
+                    <td>Flowable 7.0+</td>
+                    <td>BPMN 2.0 标准，企业级工作流引擎</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-data">数据</span></td>
+                    <td>MySQL 8.0+</td>
+                    <td>InnoDB 引擎，utf8mb4 字符集</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-data">数据</span></td>
+                    <td>Redis 7+</td>
+                    <td>会话缓存、权限缓存、限流</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-infra">基础设施</span></td>
+                    <td>Docker + Docker Compose</td>
+                    <td>一致性部署环境</td>
+                </tr>
+                <tr>
+                    <td><span class="layer-badge layer-infra">基础设施</span></td>
+                    <td>Nginx</td>
+                    <td>SSL 终止、静态资源、负载均衡</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 架构设计 -->
+    <div class="section" id="architecture">
+        <h3>整体架构</h3>
+        <div class="arch-diagram">
+┌─────────────────────────────────────────────────────────────┐
+│                        用户层                                │
+│              浏览器 (Chrome / Edge / Firefox)                │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ HTTPS
+┌──────────────────────────▼──────────────────────────────────┐
+│                     Nginx 反向代理                           │
+│              SSL 终止 / 静态资源 / 负载均衡                  │
+└────────┬────────────────────────────────────────┬────────────┘
+         │                                        │
+         ▼                                        ▼
+┌─────────────────┐                    ┌─────────────────────┐
+│   Vue 3 前端    │                    │   Spring Boot 后端  │
+│   (静态资源)    │                    │   (REST API)        │
+└─────────────────┘                    └──────────┬──────────┘
+                                                  │
+                              ┌───────────────────┼───────────────────┐
+                              ▼                   ▼                   ▼
+                       ┌────────────┐      ┌────────────┐     ┌────────────┐
+                       │   MySQL    │      │   Redis    │     │  文件存储  │
+                       │   主数据库 │      │   缓存     │     │  MinIO/本地│
+                       └────────────┘      └────────────┘     └────────────┘</div>
+    </div>
+
+    <!-- 后端分层 -->
+    <div class="section" id="backend-arch">
+        <h3>后端分层架构</h3>
+        <div class="arch-diagram">
+┌─────────────────────────────────────────────────────────────┐
+│  Controller 层   │ 接口定义、参数校验、统一响应              │
+├──────────────────┼──────────────────────────────────────────┤
+│  Service 层      │ 业务逻辑、事务管理、领域规则              │
+├──────────────────┼──────────────────────────────────────────┤
+│  Mapper 层       │ 数据访问、MyBatis-Plus、分页查询          │
+├──────────────────┼──────────────────────────────────────────┤
+│  Entity 层       │ 数据库实体映射                            │
+└─────────────────────────────────────────────────────────────┘
+
+横切关注点:
+├── Spring Security + JWT    (认证授权)
+├── Flowable                 (工作流引擎)
+├── AOP 日志                 (操作审计)
+├── 全局异常处理             (统一错误响应)
+└── Redis 缓存               (性能优化)</div>
+
+        <h3>模块化单体架构</h3>
+        <p>采用模块化单体（Modular Monolith）设计，内部模块边界清晰，外部单一部署。未来需要时可拆分为微服务。</p>
+        <div class="arch-diagram">
+com.erp
+├── common/                    # 公共模块
+│   ├── config/                # 全局配置
+│   ├── security/              # 安全组件
+│   ├── exception/             # 异常处理
+│   ├── annotation/            # 自定义注解
+│   └── utils/                 # 工具类
+│
+├── module/                    # 业务模块
+│   ├── auth/                  # 认证模块
+│   ├── system/                # 系统管理（用户/角色/部门/日志）
+│   ├── customer/              # 客户管理
+│   ├── product/               # 产品管理（含 BOM）
+│   ├── order/                 # 订单管理
+│   ├── inventory/             # 库存管理
+│   ├── production/            # 生产管理
+│   ├── purchase/              # 采购管理
+│   ├── quality/               # 质量管理
+│   └── workflow/              # 工作流模块（Flowable 集成）
+│
+└── ErpApplication.java        # 启动类</div>
+
+        <h4>每个业务模块内部结构</h4>
+        <div class="arch-diagram">
+module/customer/
+├── controller/                # 接口层
+├── service/                   # 业务层
+│   ├── impl/
+├── mapper/                    # 数据访问层
+├── entity/                    # 数据库实体
+├── dto/                       # 请求/响应对象
+├── vo/                        # 视图对象
+└── enums/                     # 枚举常量</div>
+    </div>
+
+    <!-- 安全架构 -->
+    <div class="section" id="authn">
+        <h2><span class="icon">3</span> 安全架构</h2>
+
+        <h3>认证方案</h3>
+        <div class="flow-container">
+            <div class="flow-step">用户登录</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">验证码校验</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">密码校验 (BCrypt)</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">签发 JWT</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">返回 Token</div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="label">Access Token</div>
+                <div class="value">有效期 15 分钟</div>
+            </div>
+            <div class="info-card">
+                <div class="label">Refresh Token</div>
+                <div class="value">有效期 7 天</div>
+            </div>
+            <div class="info-card">
+                <div class="label">密码哈希</div>
+                <div class="value">BCrypt + 随机盐值</div>
+            </div>
+            <div class="info-card">
+                <div class="label">登录锁定</div>
+                <div class="value">5 次失败锁定 30 分钟</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 授权方案 -->
+    <div class="section" id="authz">
+        <h3>授权方案 (RBAC)</h3>
+
+        <div class="rbac-diagram">
+            <div class="rbac-entity rbac-user">用户 (User)</div>
+            <span class="rbac-arrow">&#8596;</span>
+            <div class="rbac-entity rbac-role">角色 (Role)</div>
+            <span class="rbac-arrow">&#8596;</span>
+            <div class="rbac-entity rbac-perm">权限 (Permission)</div>
+        </div>
+
+        <div class="rbac-detail">
+            <div class="rbac-detail-card">
+                <h5>菜单权限</h5>
+                <ul>
+                    <li>控制用户能看到哪些页面</li>
+                    <li>未授权菜单不显示</li>
+                </ul>
+            </div>
+            <div class="rbac-detail-card">
+                <h5>按钮权限</h5>
+                <ul>
+                    <li>新增 / 编辑 / 删除 / 导出</li>
+                    <li>未授权按钮禁用或隐藏</li>
+                </ul>
+            </div>
+            <div class="rbac-detail-card">
+                <h5>数据权限</h5>
+                <ul>
+                    <li>全部数据</li>
+                    <li>本部门及下级部门数据</li>
+                    <li>本部门数据</li>
+                    <li>仅本人数据</li>
+                </ul>
+            </div>
+        </div>
+
+        <h4>预设角色</h4>
+        <table class="tech-table">
+            <thead><tr><th>角色</th><th>权限范围</th></tr></thead>
+            <tbody>
+                <tr><td>系统管理员</td><td>全部权限</td></tr>
+                <tr><td>厂长/总经理</td><td>全部数据查看 + 审批权限</td></tr>
+                <tr><td>销售主管</td><td>客户/订单管理 + 本部门数据</td></tr>
+                <tr><td>车间主管</td><td>生产管理 + 本车间数据</td></tr>
+                <tr><td>仓库管理员</td><td>库存管理 + 全部库存数据</td></tr>
+                <tr><td>采购员</td><td>采购管理 + 本人数据</td></tr>
+                <tr><td>质检员</td><td>质量管理 + 检验操作</td></tr>
+                <tr><td>普通员工</td><td>基础查看权限</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 审计追踪 -->
+    <div class="section" id="audit">
+        <h3>审计追踪</h3>
+        <table class="tech-table">
+            <thead>
+                <tr><th>审计类型</th><th>记录内容</th><th>保留期限</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>操作日志</td><td>操作人、操作时间、操作类型、IP、请求参数、响应结果</td><td>1 年</td></tr>
+                <tr><td>登录日志</td><td>用户名、登录时间、IP、设备信息、登录结果</td><td>1 年</td></tr>
+                <tr><td>数据变更</td><td>变更人、变更时间、变更表、变更字段、旧值、新值</td><td>3 年</td></tr>
+                <tr><td>审批日志</td><td>审批人、审批时间、审批动作、审批意见</td><td>3 年</td></tr>
+            </tbody>
+        </table>
+
+        <h4>传输与存储安全</h4>
+        <div class="security-grid">
+            <div class="security-card">
+                <h4>传输层</h4>
+                <ul><li>HTTPS 强制（TLS 1.2+）</li></ul>
+            </div>
+            <div class="security-card">
+                <h4>存储层</h4>
+                <ul><li>敏感字段加密存储（密码、身份证、银行卡）</li></ul>
+            </div>
+            <div class="security-card">
+                <h4>接口防护</h4>
+                <ul>
+                    <li>SQL 注入防护（参数化查询）</li>
+                    <li>XSS 防护（输出编码）</li>
+                    <li>CSRF 防护（Token 验证）</li>
+                </ul>
+            </div>
+            <div class="security-card">
+                <h4>限流策略</h4>
+                <ul><li>接口级别限流，防暴力破解和 CC 攻击</li></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 功能模块总览 -->
+    <div class="section" id="modules">
+        <h2><span class="icon">4</span> 功能模块</h2>
+
+        <h3>模块优先级</h3>
+        <div class="module-grid">
+            <div class="module-card">
+                <h4><span class="tag tag-p0">P0</span> 用户认证与权限</h4>
+                <p>系统基础，没有它系统无法运行</p>
+            </div>
+            <div class="module-card">
+                <h4><span class="tag tag-p0">P0</span> 客户管理</h4>
+                <p>销售业务起点</p>
+            </div>
+            <div class="module-card">
+                <h4><span class="tag tag-p0">P0</span> 产品管理（含 BOM）</h4>
+                <p>制造业核心，影响生产和成本</p>
+            </div>
+            <div class="module-card">
+                <h4><span class="tag tag-p0">P0</span> 订单管理</h4>
+                <p>业务主流程</p>
+            </div>
+            <div class="module-card">
+                <h4><span class="tag tag-p0">P0</span> 库存管理</h4>
+                <p>物料和成品管控</p>
+            </div>
+            <div class="module-card">
+                <h4><span class="tag tag-p1">P1</span> 生产管理</h4>
+                <p>工厂核心业务</p>
+            </div>
+            <div class="module-card">
+                <h4><span class="tag tag-p1">P1</span> 采购管理</h4>
+                <p>供应链保障</p>
+            </div>
+            <div class="module-card">
+                <h4><span class="tag tag-p1">P1</span> 质量管理</h4>
+                <p>产品品质保证</p>
+            </div>
+            <div class="module-card">
+                <h4><span class="tag tag-p1">P1</span> 报表与分析</h4>
+                <p>经营决策支持</p>
+            </div>
+            <div class="module-card">
+                <h4><span class="tag tag-p2">P2</span> 财务管理</h4>
+                <p>应收应付、成本核算（后续迭代）</p>
+            </div>
+            <div class="module-card">
+                <h4><span class="tag tag-p2">P2</span> 设备管理</h4>
+                <p>设备台账、维护计划（后续迭代）</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用户认证模块 -->
+    <div class="section" id="mod-auth">
+        <h3>用户认证与权限</h3>
+        <h4>页面</h4>
+        <ul class="checklist">
+            <li>登录页（用户名 + 密码 + 验证码）</li>
+            <li>用户管理（增删改查、重置密码、启用/禁用）</li>
+            <li>角色管理（角色列表、分配权限）</li>
+            <li>部门管理（组织架构树）</li>
+            <li>个人中心（修改密码、查看登录记录）</li>
+            <li>操作日志（审计追踪）</li>
+        </ul>
+        <h4>核心接口</h4>
+        <div class="arch-diagram">
+POST   /api/auth/login          # 登录
+POST   /api/auth/logout         # 注销
+POST   /api/auth/refresh        # 刷新 Token
+GET    /api/users               # 用户列表
+POST   /api/users               # 创建用户
+PUT    /api/users/{id}          # 更新用户
+DELETE /api/users/{id}          # 删除用户
+GET    /api/roles               # 角色列表
+POST   /api/roles               # 创建角色
+PUT    /api/roles/{id}          # 更新角色
+GET    /api/departments         # 部门列表
+POST   /api/departments         # 创建部门
+GET    /api/logs                # 操作日志</div>
+    </div>
+
+    <!-- 客户管理 -->
+    <div class="section" id="mod-customer">
+        <h3>客户管理</h3>
+        <h4>页面</h4>
+        <ul class="checklist">
+            <li>客户列表（搜索、筛选、分页）</li>
+            <li>客户详情（基本信息 + 联系人 + 历史订单 + 合同）</li>
+            <li>客户分类（客户等级、行业）</li>
+            <li>联系人管理（一个客户多个联系人）</li>
+            <li>客户跟进记录</li>
+        </ul>
+        <h4>核心数据</h4>
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="label">基本信息</div>
+                <div class="value">编码、名称、类型（国内/国外）、等级、行业</div>
+            </div>
+            <div class="info-card">
+                <div class="label">财务信息</div>
+                <div class="value">税号、开户行、账期、信用额度</div>
+            </div>
+            <div class="info-card">
+                <div class="label">联系人</div>
+                <div class="value">姓名、职位、电话、邮箱</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 产品管理 -->
+    <div class="section" id="mod-product">
+        <h3>产品管理</h3>
+        <h4>页面</h4>
+        <ul class="checklist">
+            <li>产品列表（搜索、分类筛选）</li>
+            <li>产品详情（规格参数 + BOM + 图片）</li>
+            <li>产品分类管理</li>
+            <li>BOM 物料清单管理</li>
+            <li>产品价格管理（标准售价、阶梯报价）</li>
+        </ul>
+
+        <h4>BOM 结构示例</h4>
+        <div class="bom-tree">
+成品 A
+├── 原材料 1 &times; 2 个 (损耗率 1%)
+├── 原材料 2 &times; 1 个 (损耗率 0.5%)
+├── 半成品 B &times; 1 个
+│   ├── 原材料 3 &times; 3 个
+│   └── 原材料 4 &times; 1 个
+└── 包装材料 &times; 1 套</div>
+        <p style="color: var(--danger); font-weight: 600;">BOM 是制造业核心，直接影响生产计划和成本核算。</p>
+    </div>
+
+    <!-- 订单管理 -->
+    <div class="section" id="mod-order">
+        <h3>订单管理</h3>
+        <h4>页面</h4>
+        <ul class="checklist">
+            <li>订单列表（按状态筛选）</li>
+            <li>订单创建（选客户 → 选产品 → 填数量/单价/交期）</li>
+            <li>订单详情（订单信息 + 产品明细 + 生产进度 + 发货记录）</li>
+            <li>订单变更（修改数量/交期，需要审批）</li>
+            <li>订单跟踪（状态流转可视化）</li>
+        </ul>
+
+        <h4>订单状态机</h4>
+        <div class="state-machine">
+            <div class="state-box state-draft">草稿</div>
+            <span class="state-arrow">&#10132;</span>
+            <div class="state-box state-confirmed">已确认</div>
+            <span class="state-arrow">&#10132;</span>
+            <div class="state-box state-producing">生产中</div>
+            <span class="state-arrow">&#10132;</span>
+            <div class="state-box state-done">已完成</div>
+            <span class="state-arrow">&#10132;</span>
+            <div class="state-box state-closed">已关闭</div>
+        </div>
+    </div>
+
+    <!-- 库存管理 -->
+    <div class="section" id="mod-inventory">
+        <h3>库存管理</h3>
+        <h4>页面</h4>
+        <ul class="checklist">
+            <li>库存总览（各仓库库存汇总、库存预警）</li>
+            <li>入库管理（采购入库、生产入库、退货入库）</li>
+            <li>出库管理（销售出库、生产领料、报废出库）</li>
+            <li>库存盘点（创建盘点单 → 实盘 → 差异处理）</li>
+            <li>库存查询（按产品/仓库/批次查库存）</li>
+            <li>仓库管理（仓库信息、库位管理）</li>
+            <li>库间调拨（仓库间物料转移）</li>
+        </ul>
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="label">核心数据</div>
+                <div class="value">产品ID、仓库ID、批次号、数量、库位</div>
+            </div>
+            <div class="info-card">
+                <div class="label">库存控制</div>
+                <div class="value">安全库存、最高库存、最低库存</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 生产管理 -->
+    <div class="section" id="mod-production">
+        <h3>生产管理</h3>
+        <h4>页面</h4>
+        <ul class="checklist">
+            <li>生产计划（从订单生成生产计划）</li>
+            <li>工单管理（生产工单的创建、下达、完工）</li>
+            <li>工艺路线（定义产品的生产工序）</li>
+            <li>生产排程（甘特图排产）</li>
+            <li>生产报工（工人汇报完成数量）</li>
+            <li>生产进度跟踪</li>
+        </ul>
+
+        <h4>核心流程</h4>
+        <div class="flow-container">
+            <div class="flow-step">销售订单</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">生产计划</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">生产工单</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">领料</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">生产</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">质检</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">入库</div>
+        </div>
+
+        <h4>工艺路线示例（产品 A）</h4>
+        <div class="process-route">
+            <div class="process-step">
+                <span class="step-num">1</span>
+                <span class="step-name">下料</span>
+                <span class="step-detail">设备: 切割机 | 标准工时: 10min</span>
+            </div>
+            <div class="process-connector"></div>
+            <div class="process-step">
+                <span class="step-num">2</span>
+                <span class="step-name">折弯</span>
+                <span class="step-detail">设备: 折弯机 | 标准工时: 15min</span>
+            </div>
+            <div class="process-connector"></div>
+            <div class="process-step">
+                <span class="step-num">3</span>
+                <span class="step-name">焊接</span>
+                <span class="step-detail">设备: 焊机 | 标准工时: 20min</span>
+            </div>
+            <div class="process-connector"></div>
+            <div class="process-step">
+                <span class="step-num">4</span>
+                <span class="step-name">喷涂</span>
+                <span class="step-detail">设备: 喷涂线 | 标准工时: 30min</span>
+            </div>
+            <div class="process-connector"></div>
+            <div class="process-step">
+                <span class="step-num">5</span>
+                <span class="step-name">组装</span>
+                <span class="step-detail">人工 | 标准工时: 25min</span>
+            </div>
+            <div class="process-connector"></div>
+            <div class="process-step">
+                <span class="step-num">6</span>
+                <span class="step-name">检验</span>
+                <span class="step-detail">人工 | 标准工时: 10min</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 采购管理 -->
+    <div class="section" id="mod-purchase">
+        <h3>采购管理</h3>
+        <h4>页面</h4>
+        <ul class="checklist">
+            <li>供应商管理（供应商档案、资质、评估）</li>
+            <li>采购申请（需求提交、审批）</li>
+            <li>采购订单（询价、比价、下单）</li>
+            <li>采购入库（到货检验、入库）</li>
+            <li>采购对账（与供应商对账）</li>
+        </ul>
+
+        <h4>核心流程</h4>
+        <div class="flow-container">
+            <div class="flow-step">采购申请</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">审批</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">采购订单</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">到货</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">IQC 检验</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">入库</div>
+            <span class="flow-arrow">&#10132;</span>
+            <div class="flow-step">对账</div>
+        </div>
+    </div>
+
+    <!-- 质量管理 -->
+    <div class="section" id="mod-quality">
+        <h3>质量管理</h3>
+        <h4>页面</h4>
+        <ul class="checklist">
+            <li>检验标准管理（定义各类产品的检验项目和标准）</li>
+            <li>来料检验 (IQC)：采购物料入库前检验</li>
+            <li>过程检验 (IPQC)：生产过程中检验</li>
+            <li>成品检验 (OQC)：成品出货前检验</li>
+            <li>不合格品处理（让步接收/返工/报废）</li>
+            <li>质量统计分析（合格率趋势、不良原因分析）</li>
+        </ul>
+    </div>
+
+    <!-- 报表分析 -->
+    <div class="section" id="mod-report">
+        <h3>报表与分析</h3>
+        <div class="module-grid">
+            <div class="module-card">
+                <h4>销售报表</h4>
+                <ul>
+                    <li>销售额统计</li>
+                    <li>客户排名</li>
+                    <li>产品排名</li>
+                </ul>
+            </div>
+            <div class="module-card">
+                <h4>生产报表</h4>
+                <ul>
+                    <li>产量统计</li>
+                    <li>良品率</li>
+                    <li>设备利用率</li>
+                </ul>
+            </div>
+            <div class="module-card">
+                <h4>库存报表</h4>
+                <ul>
+                    <li>库存周转率</li>
+                    <li>呆滞物料</li>
+                    <li>库存预警</li>
+                </ul>
+            </div>
+            <div class="module-card">
+                <h4>采购报表</h4>
+                <ul>
+                    <li>采购金额</li>
+                    <li>供应商排名</li>
+                </ul>
+            </div>
+            <div class="module-card">
+                <h4>质量报表</h4>
+                <ul>
+                    <li>合格率趋势</li>
+                    <li>不良 Pareto 分析</li>
+                </ul>
+            </div>
+            <div class="module-card">
+                <h4>经营看板</h4>
+                <ul>
+                    <li>核心 KPI 汇总展示</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 工作流设计 -->
+    <div class="section" id="workflow">
+        <h2><span class="icon">5</span> 工作流设计</h2>
+
+        <h3>集成策略：分阶段集成</h3>
+
+        <div class="security-grid">
+            <div class="security-card" style="border-top-color: var(--success);">
+                <h4>第一阶段：轻度集成</h4>
+                <ul>
+                    <li>Flowable 只负责审批流</li>
+                    <li>采购审批、订单变更审批等</li>
+                    <li>业务状态由代码管理</li>
+                    <li>目标：先把核心业务跑起来</li>
+                </ul>
+            </div>
+            <div class="security-card" style="border-top-color: var(--primary);">
+                <h4>第二阶段：深度集成（系统稳定后）</h4>
+                <ul>
+                    <li>将需要灵活配置的流程交给 Flowable</li>
+                    <li>生产工单流转、质检流程等</li>
+                    <li>平滑迁移，无需重写</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>审批场景</h3>
+        <table class="tech-table">
+            <thead>
+                <tr><th>审批场景</th><th>触发条件</th><th>审批链</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>采购申请审批</td><td>提交采购申请</td><td>申请人 → 部门主管 → 厂长（金额>5000）</td></tr>
+                <tr><td>采购订单审批</td><td>创建采购订单</td><td>采购员 → 采购主管 → 财务确认</td></tr>
+                <tr><td>订单变更审批</td><td>修改已确认订单</td><td>销售员 → 销售主管 → 生产确认</td></tr>
+                <tr><td>不合格品处理</td><td>质检不合格</td><td>质检员 → 质量主管 → 技术判定</td></tr>
+                <tr><td>费用报销</td><td>提交报销单</td><td>申请人 → 部门主管 → 财务</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 数据库设计 -->
+    <div class="section" id="database">
+        <h2><span class="icon">6</span> 数据库设计要点</h2>
+
+        <h3>多工厂扩展预留</h3>
+        <p>所有核心表包含 <code>factory_id BIGINT DEFAULT 1</code> 字段。当前单工厂场景下默认为 1，未来扩展多工厂时只需增加工厂表和查询过滤。</p>
+
+        <h3>通用字段</h3>
+        <div class="arch-diagram">
+id            BIGINT       PRIMARY KEY AUTO_INCREMENT
+created_by    BIGINT       COMMENT '创建人ID'
+created_at    DATETIME     COMMENT '创建时间'
+updated_by    BIGINT       COMMENT '更新人ID'
+updated_at    DATETIME     COMMENT '更新时间'
+deleted       TINYINT      DEFAULT 0 COMMENT '逻辑删除标记'
+factory_id    BIGINT       DEFAULT 1 COMMENT '工厂ID'
+remark        VARCHAR(500) COMMENT '备注'</div>
+
+        <h3>核心表结构概览</h3>
+        <table class="tech-table">
+            <thead><tr><th>模块</th><th>核心表</th><th>说明</th></tr></thead>
+            <tbody>
+                <tr><td>系统</td><td>sys_user, sys_role, sys_permission, sys_dept, sys_log</td><td>用户/角色/权限/部门/日志</td></tr>
+                <tr><td>客户</td><td>customer, customer_contact, customer_follow</td><td>客户/联系人/跟进记录</td></tr>
+                <tr><td>产品</td><td>product, product_category, product_bom, bom_item</td><td>产品/分类/BOM/物料明细</td></tr>
+                <tr><td>订单</td><td>sales_order, order_item</td><td>销售订单/订单明细</td></tr>
+                <tr><td>库存</td><td>inventory, warehouse, stock_in, stock_out, stock_check</td><td>库存/仓库/入库/出库/盘点</td></tr>
+                <tr><td>生产</td><td>production_order, process_route, process_step, work_report</td><td>生产工单/工艺路线/工序/报工</td></tr>
+                <tr><td>采购</td><td>supplier, purchase_request, purchase_order, purchase_item</td><td>供应商/采购申请/采购订单/明细</td></tr>
+                <tr><td>质量</td><td>quality_standard, inspection_record, defect_record</td><td>检验标准/检验记录/不良记录</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 迭代计划 -->
+    <div class="section" id="iteration">
+        <h2><span class="icon">7</span> 迭代计划</h2>
+
+        <h3>策略：纵向切片</h3>
+        <p>每次迭代交付一个完整可用的功能模块。第一个模块做完后形成的开发模式将成为后续模块的模板，效率逐迭代提升。</p>
+
+        <h3>迭代时间线</h3>
+        <div class="timeline">
+            <div class="timeline-item iter-0">
+                <div class="timeline-card">
+                    <h4>迭代 0：基础设施搭建</h4>
+                    <span class="duration">1-2 周</span>
+                    <ul>
+                        <li>前端项目初始化（基于 Vben Admin）</li>
+                        <li>后端项目初始化（Spring Boot 3 脚手架）</li>
+                        <li>数据库初始化（MySQL + 建表脚本）</li>
+                        <li>Docker 开发环境</li>
+                        <li>统一响应格式、全局异常处理</li>
+                        <li>日志框架、跨域配置、接口文档</li>
+                        <li>前后端联调验证</li>
+                    </ul>
+                    <div class="deliverable">交付物：项目骨架、开发环境、框架跑通</div>
+                </div>
+            </div>
+
+            <div class="timeline-item iter-1">
+                <div class="timeline-card">
+                    <h4>迭代 1：用户认证 + 权限 + 客户管理</h4>
+                    <span class="duration">2-3 周</span>
+                    <ul>
+                        <li>登录/注销、用户管理、角色管理、部门管理</li>
+                        <li>客户 CRUD、客户分类、联系人管理</li>
+                    </ul>
+                    <div class="deliverable">交付物：可登录、可管理客户的系统</div>
+                </div>
+            </div>
+
+            <div class="timeline-item iter-2">
+                <div class="timeline-card">
+                    <h4>迭代 2：产品管理 + BOM</h4>
+                    <span class="duration">2-3 周</span>
+                    <ul>
+                        <li>产品目录、产品分类、规格参数</li>
+                        <li>BOM 物料清单、产品图片</li>
+                    </ul>
+                    <div class="deliverable">交付物：可管理产品和物料清单</div>
+                </div>
+            </div>
+
+            <div class="timeline-item iter-3">
+                <div class="timeline-card">
+                    <h4>迭代 3：订单管理 + 库存基础</h4>
+                    <span class="duration">2-3 周</span>
+                    <ul>
+                        <li>销售订单 CRUD、订单状态流转</li>
+                        <li>库存查询、入库/出库、多仓库管理</li>
+                    </ul>
+                    <div class="deliverable">交付物：可下单、可查看库存</div>
+                </div>
+            </div>
+
+            <div class="timeline-item iter-4">
+                <div class="timeline-card">
+                    <h4>迭代 4：生产管理</h4>
+                    <span class="duration">2-3 周</span>
+                    <ul>
+                        <li>生产工单、工艺路线、生产报工</li>
+                        <li>订单→生产计划→工单 的关联</li>
+                    </ul>
+                    <div class="deliverable">交付物：可从订单生成工单、跟踪生产进度</div>
+                </div>
+            </div>
+
+            <div class="timeline-item iter-5">
+                <div class="timeline-card">
+                    <h4>迭代 5：采购管理 + 质量管理</h4>
+                    <span class="duration">2-3 周</span>
+                    <ul>
+                        <li>供应商管理、采购订单</li>
+                        <li>来料检验、过程检验、不合格品处理</li>
+                    </ul>
+                    <div class="deliverable">交付物：采购和质检闭环</div>
+                </div>
+            </div>
+
+            <div class="timeline-item iter-6">
+                <div class="timeline-card">
+                    <h4>迭代 6：报表 + 工作流 + 收尾</h4>
+                    <span class="duration">2-3 周</span>
+                    <ul>
+                        <li>经营报表、生产报表、库存报表</li>
+                        <li>Flowable 审批流集成</li>
+                        <li>系统优化、性能调优</li>
+                    </ul>
+                    <div class="deliverable">交付物：完整可用的 ERP 系统</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="label">总工期</div>
+                <div class="value">约 14-20 周（3.5-5 个月）</div>
+            </div>
+            <div class="info-card">
+                <div class="label">迭代数</div>
+                <div class="value">7 个迭代（含基础设施）</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 部署方案 -->
+    <div class="section" id="deploy">
+        <h2><span class="icon">8</span> 部署方案</h2>
+
+        <h3>开发环境</h3>
+        <div class="arch-diagram">
+# docker-compose.yml
+services:
+  mysql:
+    image: mysql:8.0
+    ports: ["3306:3306"]
+    environment:
+      MYSQL_ROOT_PASSWORD: xxx
+      MYSQL_DATABASE: erp
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]</div>
+
+        <h3>生产环境</h3>
+        <div class="arch-diagram">
+┌─────────────────────────────────────────────────────────────┐
+│                    云服务器 (4核8G 起步)                     │
+│                                                             │
+│  ┌─────────┐  ┌─────────────┐  ┌─────────┐  ┌───────────┐ │
+│  │  Nginx  │  │ Spring Boot │  │  MySQL  │  │   Redis   │ │
+│  │  :80/443│  │   :8080     │  │  :3306  │  │   :6379   │ │
+│  └─────────┘  └─────────────┘  └─────────┘  └───────────┘ │
+│                                                             │
+│  Docker Compose 编排，一键部署                               │
+└─────────────────────────────────────────────────────────────┘</div>
+
+        <h3>备份策略</h3>
+        <table class="tech-table">
+            <thead><tr><th>备份对象</th><th>频率</th><th>保留期限</th><th>方式</th></tr></thead>
+            <tbody>
+                <tr><td>MySQL 数据库</td><td>每日凌晨</td><td>30 天</td><td>mysqldump + 云快照</td></tr>
+                <tr><td>上传文件</td><td>每周</td><td>90 天</td><td>增量备份</td></tr>
+                <tr><td>应用配置</td><td>每次变更</td><td>永久</td><td>Git 版本管理</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 风险与应对 -->
+    <div class="section" id="risks">
+        <h2><span class="icon">9</span> 风险与应对</h2>
+
+        <table class="risk-table">
+            <thead><tr><th>风险</th><th>影响</th><th>应对策略</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong>前端经验不足</strong></td>
+                    <td>开发效率低、代码质量差</td>
+                    <td>使用 Vben Admin 脚手架，第一个模块重点打磨，形成模板</td>
+                </tr>
+                <tr>
+                    <td><strong>Flowable 学习曲线</strong></td>
+                    <td>工作流集成进度慢</td>
+                    <td>第一阶段轻度集成，降低复杂度</td>
+                </tr>
+                <tr>
+                    <td><strong>需求频繁变更</strong></td>
+                    <td>迭代计划被打乱</td>
+                    <td>纵向切片交付，每个迭代可独立调整</td>
+                </tr>
+                <tr>
+                    <td><strong>数据库设计不合理</strong></td>
+                    <td>后期重构成本高</td>
+                    <td>迭代 0 重点设计核心表结构，预留扩展字段</td>
+                </tr>
+                <tr>
+                    <td><strong>性能瓶颈</strong></td>
+                    <td>用户体验差</td>
+                    <td>Redis 缓存热点数据，SQL 索引优化，分页查询</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="doc-footer">
+        <p>工厂 ERP 系统 - 项目规划文档 v1.0</p>
+        <p>文档维护：随项目演进持续更新 | 最后更新：2026-05-09</p>
+    </div>
+
+</main>
+
+<script>
+    // Smooth scroll for sidebar links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+
+    // Active link on scroll
+    const sections = document.querySelectorAll('.section, .doc-header');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (window.pageYOffset >= sectionTop - 100) {
+                current = section.getAttribute('id');
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
